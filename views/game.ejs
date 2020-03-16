@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>memory game</title>
+    <link rel="stylesheet" href="style/style_game.css">
+    <script src="/js/Player.js"></script>
+    <script src="/js/Game.js"></script>
+    <script src="/js/setup.js" defer></script>
+    <script src="/js/handlers.js" defer></script>
+</head>
+
+<body>
+    <header>
+
+
+    </header>
+
+    <main>
+        <div id="game">
+
+            <% for(src of cardImage){ %>
+
+            <div data-card="<%=src%>" class="card">
+
+                <div data-card="<%=src%>" class="front"><img src="images/moomin_cards/<%=src%>" alt=""></div>
+
+                <div data-card="<%=src%>" class="back"><img src="/images/moomin_house.svg" alt=""></div>
+
+            </div>
+
+            <%};%>
+        </div>
+
+
+    </main>
+
+</body>
+
+</html>
