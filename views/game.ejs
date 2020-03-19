@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>memory game</title>
     <link rel="stylesheet" href="style/style_game.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="/js/Render.js"></script>
     <script src="/js/Player.js"></script>
     <script src="/js/Game.js"></script>
     <script src="/js/setup.js" defer></script>
@@ -18,6 +20,75 @@
     </header>
 
     <main>
+
+
+
+        <div id="menu-wrapper">
+            <div id="menu">
+
+                <h1>Moomin Memory Game</h1>
+
+                <div id="options">
+                    <div data-type="single" class="option">single player</div>
+                    <div data-type="multi-local" class="option">two players local</div>
+                    <div data-type="multi-online" class="option">two players online</div>
+
+                </div>
+
+                <div id="enter-names">
+
+                    <h2>enter your name</h2>
+                    <input id="player1-name" placeholder="Player 1" type="text">
+                    <input id="player2-name" placeholder="Player 2" type="text">
+                    <button id="play-button">Play</button>
+                    <button id="back-button">back</button>
+
+                </div>
+
+
+                <div id="image-carousel">
+                    <% for(src of cardImage){ %>
+
+                    <img src="images/moomin_cards/<%=src%>" alt="">
+
+                    <%};%>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div id="header">
+            <img src="/images/moomin_cards/moomintroll.svg" alt="">
+
+            <h1>MOOMIN</h1>
+            <img src="/images/moomin_cards/stinky.svg" alt="">
+        </div>
+        <div id="scoreboard">
+
+            <div id="scoreboard-1">
+
+                <div data-player="1" class="player-name"></div>
+                <div data-pairs="1" class="pairs">Pairs: 0</div>
+                <div data-moves="1" class="moves">Moves: 0</div>
+
+            </div>
+
+
+            <div style="display:none;" id="scoreboard-2">
+
+                <div data-player="2" class="player-name"></div>
+                <div data-pairs="2" class="pairs">Pairs: 0</div>
+                <div data-moves="2" class="moves">Moves: 0</div>
+
+            </div>
+
+        </div>
+
         <div id="game">
 
             <% for(src of cardImage){ %>

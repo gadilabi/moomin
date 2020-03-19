@@ -1,16 +1,25 @@
 const express = require("express");
 const ejs = require("ejs");
-const PORT = process.env.PORT || 3000;
 const fs = require("fs");
+const socket = require("socket.io");
+
+
+const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.listen(3000, (err) => {
+let server = app.listen(3000, (err) => {
     if (err)
         console.log("Express failed");
     else
         console.log(`Listening on port ${PORT}`);
 });
 
+let io = socket(server);
+
+io.on("connection", function (socket) {
+    console.log("Connection has been made!");
+
+});
 
 app.set("view engine", "ejs");
 

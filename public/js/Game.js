@@ -1,26 +1,54 @@
 class Game {
 
-    constructor(cardClass, playersArray, isOnline) {
+    constructor(cardClass) {
 
-        this.players = playersArray;
+        //Array of all player objects
+        this.players = [];
 
-        this.currentPlayer = this.players[0];
+        //The player currently playing
+        this.currentPlayer = null;
 
-        this.totalNumberOfMoves = 0;
+        //The index of the player currently playing in the players array
+        this.currentPlayerIndex = 0;
 
-        //Get the cards
+        this.totalNumberOfTurns = 0;
+
+        //Get all the cards on the board
         this.cards = this.getCards(cardClass);
 
         //Currently flipped cards
         this.flipped = [];
 
         //Is this an online game
-        this.isOnline = isOnline;
+        this.gameType = "single";
 
         //Is this my turn?
         this.myTurn = false;
 
     }
+
+    setPlayers(playersArray) {
+        this.players = playersArray;
+        this.currentPlayer = playersArray[0];
+
+    }
+
+    setGameType(type) {
+        this.gameType = type;
+
+    }
+
+    getGameType() {
+        return this.gameType;
+
+    }
+
+    setNames(name1, name2) {
+        this.players[0].setName(name1);
+        this.players[1].setName(name2);
+
+    }
+
 
     getCards(cardClass) {
         let cardElements = document.querySelectorAll(`.${cardClass}`);
@@ -40,7 +68,6 @@ class Game {
         else
             return false;
 
-
     }
 
     flip(back) {
@@ -48,30 +75,23 @@ class Game {
         if (this.flipped.length === 0) {
 
             this.flipped.push(back);
-            let front = back.previousElementSibling;
+            Render.flip(back);
 
-            front.style.transform = "rotateY(0deg)";
-            front.style.transition = "transform 1s 1s";
-
-            back.style.transform = "rotateY(90deg)";
-            back.style.transition = "transform 1s";
 
         } else {
             this.flipped.push(back);
-            let front = back.previousElementSibling;
 
-            front.style.transform = "rotateY(0deg)";
-            front.style.transition = "transform 1s 1s";
+            Render.flip(back);
 
-            back.style.transform = "rotateY(90deg)";
-            back.style.transition = "transform 1s";
+            //Increment the number of moves for current players
+            this.currentPlayer.incMoves();
 
             //Check if flipped pair
             if (this.isPair()) {
                 this.addPair();
                 setTimeout(() => {
                     this.removePair();
-                    this.endTurn();
+                    this.flipBack();
                     if (this.isEnded())
                         this.endGame();
                 }, 4000);
@@ -79,7 +99,7 @@ class Game {
             } else {
                 setTimeout(() => {
 
-                    this.flipBack();
+                    Render.flipBack(this.flipped);
                     this.endTurn();
                 }, 4000);
             }
@@ -100,25 +120,14 @@ class Game {
 
     }
 
-    flipBack() {
-        for (let back of this.flipped) {
-            let front = back.previousElementSibling;
-            front.style.transform = "rotateY(90deg)";
-            front.style.transition = "transform 1s";
-
-            back.style.transform = "rotateY(0deg)";
-            back.style.transition = "transform 1s 1s";
-
-
-        }
-
-    }
 
     removePair() {
 
         for (let card of this.flipped) {
 
-            card.parentElement.remove();
+            card.parentElement.style.transform = "scale(0)";
+            card.parentElement.style.transition = "transform 1s";
+
         }
 
     }
@@ -137,15 +146,31 @@ class Game {
 
         this.cards = this.cards.filter((cardName) =>
             (cardName !== pairElement.dataset.card));
+
+        Render.updateScore(this.currentPlayerIndex + 1);
+
+    }
+
+    flipBack() {
+        this.flipped = [];
+
     }
 
     endTurn() {
-        this.flipped = [];
+        //Empty flipped array
+        this.flipBack();
         this.myTurn = false;
-        this.totalNumberOfMoves++;
 
-        let playerNumber = this.totalNumberOfMoves % this.players.length;
-        this.currentPlayer = this.players[playerNumber];
+        Render.updateScore(this.currentPlayerIndex + 1);
+
+        if (this.getGameType() !== "single") {
+
+            //Change the current player index            
+            this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
+
+            //Change the current player 
+            this.currentPlayer = this.players[this.currentPlayerIndex];
+        }
 
     }
 

@@ -3,6 +3,7 @@ class Player {
     constructor(name) {
         this.name = name;
         this.myPairs = [];
+        this.moves = 0;
     }
 
     addPair(cardName) {
@@ -10,6 +11,24 @@ class Player {
 
     }
 
+    getMoves() {
+        return this.moves;
 
+    }
+
+    setName(name) {
+        this.name = name;
+
+    }
+
+    numberOfPairs() {
+        return this.myPairs.length;
+
+    }
+
+    incMoves() {
+        this.moves++;
+
+    }
 
 }

@@ -1,8 +1,20 @@
-let cards = document.querySelectorAll(".card");
-let player1 = new Player("gad");
-let player2 = new Player("hagit");
+//Connect to server thorugh websocket
+let socket = io.connect("http://localhost:3000");
 
-let game = new Game("card", [player1, player2], false);
+//Custom Events
+let addPairEvent = new CustomEvent("addPair", {});
+
+//Elements
+let cards = document.querySelectorAll(".card");
+let menuWrapper = document.querySelector("#menu-wrapper");
+let menu = document.querySelector("#menu");
+let options = document.querySelector("#options");
+let enterNames = document.querySelector("#enter-names");
+let nameInput1 = document.querySelector("#player1-name");
+let nameInput2 = document.querySelector("#player2-name");
+
+let game = new Game("card");
+
 //Set the grid coordinates of the cards
 for (let i = 0; i < cards.length; i++) {
     let rowStart = Math.floor(i / 6) + 1;
@@ -13,5 +25,62 @@ for (let i = 0; i < cards.length; i++) {
 
     cards[i].style.gridRowStart = rowStart;
     cards[i].style.gridRowEnd = rowStart + 1;
+
+}
+
+function setNames(name1, name2) {
+    game.setNames(name1, name2);
+
+}
+
+function chooseGameType(gameType) {
+
+    if (gameType === "single")
+        nameInput2.style.display = "none";
+    else
+        nameInput2.style.display = "inline";
+
+    //Set the type of the game to single, multi-local or multi-online
+    game.setGameType(gameType);
+
+    //Close the menu
+    nextScreen();
+
+}
+
+function nextScreen() {
+
+    options.className = "scale-down";
+    enterNames.className = "scale-up";
+    options.style.height = 0;
+
+}
+
+function startGame() {
+
+    if (game.getGameType() === "single") {
+        let player1 = new Player(nameInput1.value);
+        game.setPlayers([player1]);
+        let nameScoreboard1 = scoreBoard.querySelector(`[data-player="1"]`);
+        nameScoreboard1.textContent = nameInput1.value;
+
+        document.querySelector("#scoreboard-2").style.display = "none";
+
+    } else {
+        let player1 = new Player(nameInput1);
+        let player2 = new Player(nameInput2);
+        game.setPlayers([player1, player2]);
+
+        let nameScoreboard1 = scoreBoard.querySelector(`[data-player="1"]`);
+        nameScoreboard1.textContent = nameInput1.value;
+
+        let nameScoreboard2 = scoreBoard.querySelector(`[data-player="2"]`);
+        nameScoreboard2.textContent = nameInput2.value;
+
+        document.querySelector("#scoreboard-2").style.display = "flex";
+
+    }
+
+    menuWrapper.style.display = "none";
 
 }
