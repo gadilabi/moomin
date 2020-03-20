@@ -43,6 +43,11 @@ class Game {
 
     }
 
+    getCurrentPlayerName() {
+
+        return this.currentPlayer.getName();
+    }
+
     setNames(name1, name2) {
         this.players[0].setName(name1);
         this.players[1].setName(name2);
@@ -164,6 +169,8 @@ class Game {
         Render.updateScore(this.currentPlayerIndex + 1);
 
         if (this.getGameType() !== "single") {
+
+            Render.whoseTurn(this.currentPlayerIndex + 1);
 
             //Change the current player index            
             this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;

@@ -1,5 +1,6 @@
 class Render {
 
+
     //update the scoreboard
     static updateScore(player) {
         let pairs = scoreBoard.querySelector(`[data-pairs="${player}"]`);
@@ -17,8 +18,16 @@ class Render {
 
         back.style.transform = "rotateY(90deg)";
         back.style.transition = "transform 1s";
+    }
 
+    static whoseTurn(player) {
 
+        let playerInIndex = player === 1 ? 2 : 1;
+        let playerOut = document.querySelector(`#scoreboard-${player}`);
+        let playerIn = document.querySelector(`#scoreboard-${playerInIndex}`);
+
+        playerIn.classList.add("light-scoreboard");
+        playerOut.classList.remove("light-scoreboard");
 
     }
 

@@ -70,7 +70,7 @@
         </div>
         <div id="scoreboard">
 
-            <div id="scoreboard-1">
+            <div class="light-scoreboard" id="scoreboard-1">
 
                 <div data-player="1" class="player-name"></div>
                 <div data-pairs="1" class="pairs">Pairs: 0</div>
@@ -91,13 +91,13 @@
 
         <div id="game">
 
-            <% for(src of cardImage){ %>
+            <% for(let [index, src] of cardImage.entries()){ %>
 
             <div data-card="<%=src%>" class="card">
 
                 <div data-card="<%=src%>" class="front"><img src="images/moomin_cards/<%=src%>" alt=""></div>
 
-                <div data-card="<%=src%>" class="back"><img src="/images/moomin_house.svg" alt=""></div>
+                <div data-id="<%= index%>" data-card="<%=src%>" class="back"><img src="/images/moomin_house.svg" alt=""></div>
 
             </div>
 

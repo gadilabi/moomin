@@ -21,6 +21,11 @@ class Player {
 
     }
 
+    getName() {
+
+        return this.name;
+    }
+
     numberOfPairs() {
         return this.myPairs.length;
 

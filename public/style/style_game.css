@@ -8,7 +8,6 @@
 main {
     position: relative;
     padding-top: 1px;
-
 }
 
 #menu-wrapper {
@@ -189,7 +188,44 @@ main {
 
     text-align: center;
     text-transform: capitalize;
+    margin-bottom: 10px;
+}
 
+#enter-names > button {
+    all: unset;
+    text-align: center;
+    background-color: darkcyan;
+    text-transform: capitalize;
+}
+
+#enter-names > button:hover {
+    cursor: pointer;
+
+
+}
+
+.ready {
+    position: relative;
+
+}
+
+.ready::after {
+
+    content: 'Ready';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: green;
+    z-index: 100000;
+    height: 100%;
+    width: 100%;
+}
+
+.light-scoreboard {
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
 }
 
 .scale-up {

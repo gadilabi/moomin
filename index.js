@@ -3,6 +3,12 @@ const ejs = require("ejs");
 const fs = require("fs");
 const socket = require("socket.io");
 
+var numberConnected = 0;
+//Get the list of images
+let imageName = fs.readdirSync("public/images/moomin_cards");
+
+//Double the imageName array 
+var cardImage = imageName.concat(imageName);
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,9 +21,30 @@ let server = app.listen(3000, (err) => {
 });
 
 let io = socket(server);
+var names = [];
+
 
 io.on("connection", function (socket) {
+
+    let ready = 0;
+
     console.log("Connection has been made!");
+
+    socket.on("ready", function (data) {
+        socket.broadcast.emit("ready", data);
+        names.push(data.name);
+        if (names.length === 2) {
+            io.sockets.emit("gameStart", {
+                names
+            });
+            names = [];
+        }
+    });
+
+    socket.on("flip", function (data) {
+        socket.broadcast.emit("flip", data)
+
+    });
 
 });
 
@@ -28,9 +55,6 @@ app.use(express.static('public'));
 
 app.get("/", function (req, res) {
 
-    let imageName = fs.readdirSync("public/images/moomin_cards");
-    let cardImage = imageName.concat(imageName);
-
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -38,7 +62,14 @@ app.get("/", function (req, res) {
         }
     }
 
-    shuffleArray(cardImage);
+    if (numberConnected === 0) {
+        shuffleArray(cardImage);
+
+    }
+    numberConnected++;
+
+    if (numberConnected === 2)
+        numberConnected = 0;
 
     res.render("game", {
         cardImage

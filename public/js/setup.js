@@ -35,13 +35,28 @@ function setNames(name1, name2) {
 
 function chooseGameType(gameType) {
 
-    if (gameType === "single")
-        nameInput2.style.display = "none";
-    else
+    switch (gameType) {
+        case "single":
+            nameInput2.style.display = "none";
+            break;
+        case "multi-local":
+            nameInput2.style.display = "inline";
+            break;
+        case "multi-online":
+            nameInput2.style.display = "none";
+            break;
+
+    }
+
+    if (gameType === "multi-local")
         nameInput2.style.display = "inline";
+    else
+        nameInput2.style.display = "none";
 
     //Set the type of the game to single, multi-local or multi-online
     game.setGameType(gameType);
+
+
 
     //Close the menu
     nextScreen();
@@ -56,9 +71,11 @@ function nextScreen() {
 
 }
 
-function startGame() {
+function startGame(data) {
 
-    if (game.getGameType() === "single") {
+    let gameType = game.getGameType();
+
+    if (gameType === "single") {
         let player1 = new Player(nameInput1.value);
         game.setPlayers([player1]);
         let nameScoreboard1 = scoreBoard.querySelector(`[data-player="1"]`);
@@ -66,7 +83,7 @@ function startGame() {
 
         document.querySelector("#scoreboard-2").style.display = "none";
 
-    } else {
+    } else if (gameType === "multi-local") {
         let player1 = new Player(nameInput1);
         let player2 = new Player(nameInput2);
         game.setPlayers([player1, player2]);
@@ -78,6 +95,20 @@ function startGame() {
         nameScoreboard2.textContent = nameInput2.value;
 
         document.querySelector("#scoreboard-2").style.display = "flex";
+
+    } else {
+
+        let player1 = new Player(data.names[0]);
+        let player2 = new Player(data.names[1]);
+        game.setPlayers([player1, player2]);
+
+        let nameScoreboard1 = scoreBoard.querySelector(`[data-player="1"]`);
+        nameScoreboard1.textContent = data.names[0];
+
+        let nameScoreboard2 = scoreBoard.querySelector(`[data-player="2"]`);
+        nameScoreboard2.textContent = data.names[1];
+        document.querySelector("#scoreboard-2").style.display = "flex";
+
 
     }
 
