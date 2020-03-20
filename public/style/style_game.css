@@ -205,23 +205,12 @@ main {
 }
 
 .ready {
-    position: relative;
+
+    content: "ready";
+    background-color: crimson !important;
 
 }
 
-.ready::after {
-
-    content: 'Ready';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background-color: green;
-    z-index: 100000;
-    height: 100%;
-    width: 100%;
-}
 
 .light-scoreboard {
 

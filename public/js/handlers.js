@@ -33,15 +33,19 @@ assignEventToCollection(card, function (event) {
 
 
     if (game.flipped.length < 2) {
-        game.flip(this);
-
         if (game.getGameType() === "multi-online") {
 
             if (nameInput1.value !== game.getCurrentPlayerName())
                 return;
+            game.flip(this);
             socket.emit("flip", {
                 cardId: this.dataset.id
             });
+
+        } else {
+
+            game.flip(this);
+
 
         }
 
