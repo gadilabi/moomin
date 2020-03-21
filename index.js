@@ -13,7 +13,7 @@ var cardImage = imageName.concat(imageName);
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-let server = app.listen(3000, (err) => {
+let server = app.listen(PORT, (err) => {
     if (err)
         console.log("Express failed");
     else
