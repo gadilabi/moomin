@@ -1,5 +1,6 @@
 //Connect to server thorugh websocket
-let socket = io.connect("http://localhost:3000");
+//let socket = io.connect("http://localhost:3000");
+let socket = io.connect("https://moominmemorygame.herokuapp.com/");
 
 //Custom Events
 let addPairEvent = new CustomEvent("addPair", {});
