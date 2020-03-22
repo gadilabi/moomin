@@ -1,4 +1,4 @@
-const card = document.querySelectorAll(".back");
+let card = document.querySelectorAll(".back");
 let option = document.querySelectorAll(".option");
 const backButton = document.querySelector("#back-button");
 const playButton = document.querySelector("#play-button");
@@ -28,29 +28,34 @@ socket.on("flip", function (data) {
 
 });
 
-//Click a card
-assignEventToCollection(card, function (event) {
-    if (game.flipped.length < 2) {
-        if (game.getGameType() === "multi-online") {
+function assignCardsHandler() {
 
-            if (nameInput1.value !== game.getCurrentPlayerName())
-                return;
-            game.flip(this);
-            socket.emit("flip", {
-                cardId: this.dataset.id,
-                gameId: game.getId()
-            });
+    //Click a card
+    assignEventToCollection(card, function (event) {
+        if (game.flipped.length < 2) {
+            if (game.getGameType() === "multi-online") {
 
-        } else {
+                if (nameInput1.value !== game.getCurrentPlayerName())
+                    return;
+                game.flip(this);
+                socket.emit("flip", {
+                    cardId: this.dataset.id,
+                    gameId: game.getId()
+                });
 
-            game.flip(this);
+            } else {
 
+                game.flip(this);
+
+
+            }
 
         }
 
-    }
+    });
 
-});
+}
+
 
 //Menu options handler
 assignEventToCollection(option, function (event) {

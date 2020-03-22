@@ -6,6 +6,7 @@ let socket = io.connect("http://localhost:3000");
 let addPairEvent = new CustomEvent("addPair", {});
 
 //Elements
+let board = document.querySelector("#game");
 let cards = document.querySelectorAll(".card");
 let menuWrapper = document.querySelector("#menu-wrapper");
 let menu = document.querySelector("#menu");
@@ -83,6 +84,8 @@ function startGame(data) {
         nameScoreboard1.textContent = nameInput1.value;
 
         document.querySelector("#scoreboard-2").style.display = "none";
+        
+        assignCardsHandler();
 
     } else if (gameType === "multi-local") {
         let player1 = new Player(nameInput1);
@@ -96,9 +99,10 @@ function startGame(data) {
         nameScoreboard2.textContent = nameInput2.value;
 
         document.querySelector("#scoreboard-2").style.display = "flex";
+        assignCardsHandler();
 
     } else {
-
+        //Online game
         let player1 = new Player(data.names[0]);
         let player2 = new Player(data.names[1]);
         game.setPlayers([player1, player2]);
@@ -110,9 +114,26 @@ function startGame(data) {
         nameScoreboard2.textContent = data.names[1];
         document.querySelector("#scoreboard-2").style.display = "flex";
 
+        //Get the game board from server
+        fetch(`/online/deal/${data.gameId}`)
+        .then((res)=>res.text())
+        .then((data)=> recreateBoard(data))
+        .then(()=> assignCardsHandler())
+        .catch((err)=>console.log(err));
 
     }
 
     menuWrapper.style.display = "none";
 
+}
+
+function recreateBoard(data){
+
+    document.querySelector("#game").remove();
+    let div = document.createElement("DIV");
+    div.id = "game";
+    div.innerHTML = JSON.parse(data).boardHTML;
+    document.querySelector("main").appendChild(div);
+    card = document.querySelectorAll(".back");
+    
 }

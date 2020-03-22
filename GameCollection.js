@@ -3,22 +3,21 @@ let Game = require("./Game");
 
 class GameCollection {
 
-    constructor() {
+    constructor(images) {
 
+        this.images = images;
         this.games = [];
-        this.currentGame = new Game();
+        this.currentGame = new Game(images, this.games.length);
     }
 
     insertPlayer(id, name) {
 
         if (this.currentGame.isFull())
-            this.currentGame = new Game();
-
+            this.currentGame = new Game(this.images, this.games.length);
 
         this.currentGame.insertPlayer(id, name);
         if (this.currentGame.isFull()) {
             this.games.push(this.currentGame);
-            this.currentGame.setId = this.games.length;
         }
 
         return this.currentGame;

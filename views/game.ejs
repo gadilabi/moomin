@@ -47,7 +47,7 @@
 
 
                 <div id="image-carousel">
-                    <% for(src of cardImage){ %>
+                    <% for(src of deck){ %>
 
                     <img src="images/moomin_cards/<%=src%>" alt="">
 
@@ -91,7 +91,7 @@
 
         <div id="game">
 
-            <% for(let [index, src] of cardImage.entries()){ %>
+            <% for(let [index, src] of deck.entries()){ %>
 
             <div data-card="<%=src%>" class="card">
 
