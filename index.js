@@ -2,7 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const fs = require("fs");
 const socket = require("socket.io");
-
+const GameCollection = require("./GameCollection");
 var numberConnected = 0;
 //Get the list of images
 let imageName = fs.readdirSync("public/images/moomin_cards");
@@ -21,29 +21,33 @@ let server = app.listen(PORT, (err) => {
 });
 
 let io = socket(server);
-var names = [];
-
+let gameCollection = new GameCollection();
 
 io.on("connection", function (socket) {
-
-    let ready = 0;
 
     console.log("Connection has been made!");
 
     socket.on("ready", function (data) {
-        socket.broadcast.emit("ready", data);
-        names.push(data.name);
-        if (names.length === 2) {
-            io.sockets.emit("gameStart", {
-                names
-            });
-            names = [];
+        let game = gameCollection.insertPlayer(socket.id, data.name);
+        console.log(game.size());
+        console.log(game);
+        if (game.isFull()) {
+            for (let player of game) {
+
+                io.to(`${player.getId()}`).emit("gameStart", {
+                    names: game.getNames(),
+                    gameId: gameCollection.generateGameId()
+                });
+            }
         }
     });
 
     socket.on("flip", function (data) {
-        socket.broadcast.emit("flip", data)
-
+        let game = gameCollection.getGame(data.gameId);
+        for (let player of game) {
+            if (player.getId() !== socket.id)
+                io.to(`${player.getId()}`).emit("flip", data);
+        }
     });
 
 });

@@ -1,6 +1,6 @@
 //Connect to server thorugh websocket
-//let socket = io.connect("http://localhost:3000");
-let socket = io.connect("https://moominmemorygame.herokuapp.com/");
+let socket = io.connect("http://localhost:3000");
+//let socket = io.connect("https://moominmemorygame.herokuapp.com/");
 
 //Custom Events
 let addPairEvent = new CustomEvent("addPair", {});
@@ -102,7 +102,7 @@ function startGame(data) {
         let player1 = new Player(data.names[0]);
         let player2 = new Player(data.names[1]);
         game.setPlayers([player1, player2]);
-
+        game.setId(data.gameId);
         let nameScoreboard1 = scoreBoard.querySelector(`[data-player="1"]`);
         nameScoreboard1.textContent = data.names[0];
 

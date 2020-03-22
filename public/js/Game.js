@@ -2,6 +2,9 @@ class Game {
 
     constructor(cardClass) {
 
+        //Game identifier on the server
+        this.id = null;
+
         //Array of all player objects
         this.players = [];
 
@@ -35,6 +38,16 @@ class Game {
 
     setGameType(type) {
         this.gameType = type;
+
+    }
+
+    setId(id) {
+        this.id = id;
+
+    }
+
+    getId() {
+        return this.id;
 
     }
 

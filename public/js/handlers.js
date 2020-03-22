@@ -15,7 +15,7 @@ const scoreBoard = document.querySelector("#scoreboard");
 //});
 
 socket.on("gameStart", function (data) {
-
+    console.log(data);
     startGame(data);
 });
 
@@ -30,8 +30,6 @@ socket.on("flip", function (data) {
 
 //Click a card
 assignEventToCollection(card, function (event) {
-
-
     if (game.flipped.length < 2) {
         if (game.getGameType() === "multi-online") {
 
@@ -39,7 +37,8 @@ assignEventToCollection(card, function (event) {
                 return;
             game.flip(this);
             socket.emit("flip", {
-                cardId: this.dataset.id
+                cardId: this.dataset.id,
+                gameId: game.getId()
             });
 
         } else {
