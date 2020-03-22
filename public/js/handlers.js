@@ -5,15 +5,6 @@ const playButton = document.querySelector("#play-button");
 
 const scoreBoard = document.querySelector("#scoreboard");
 
-
-//scoreBoard.addEventListener("addPair", function (event) {
-//    let pairs = scoreBoard.querySelector(`[data-score="pairs"]`);
-//    let moves = scoreBoard.querySelector(`[data-score="moves"]`);
-//    
-//    pairs.textContent = game.
-//
-//});
-
 socket.on("gameStart", function (data) {
     console.log(data);
     startGame(data);
