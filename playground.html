@@ -4,11 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <script>
+        let eye = document.querySelector("#eye");
+        eye.addEventListener("mousemove", function(e) {
+
+
+        });
+
+    </script>
     <script src="playground.js"></script>
+    <style>
+        #diff {
+
+            display: grid;
+            grid-template-columns: repeat(1fr, 6);
+            grid-template-rows: repeat(1fr, 6);
+            height: 100vh;
+            width: 100%;
+            background-color: black;
+            color: black;
+            font-size: 100px;
+
+        }
+
+        #eye {
+            height: 100px;
+            width: 100px;
+            transform: translate(200px, 200px);
+            background-color: cadetblue;
+            mix-blend-mode: lighten;
+            border-radius: 50%;
+
+        }
+
+    </style>
 </head>
 
 <body>
+    <div id="diff">
+        <div id="eye"></div>
 
+    </div>
 </body>
 
 </html>

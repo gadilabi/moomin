@@ -1,197 +1,210 @@
 class Game {
 
-    constructor(cardClass) {
+	constructor(cardClass) {
 
-        //Game identifier on the server
-        this.id = null;
+		//Game identifier on the server
+		this.id = null;
 
-        //Array of all player objects
-        this.players = [];
+		//Array of all player objects
+		this.players = [];
 
-        //The player currently playing
-        this.currentPlayer = null;
+		//The player currently playing
+		this.currentPlayer = null;
 
-        //The index of the player currently playing in the players array
-        this.currentPlayerIndex = 0;
+		//The index of the player currently playing in the players array
+		this.currentPlayerIndex = 0;
 
-        this.totalNumberOfTurns = 0;
+		this.totalNumberOfTurns = 0;
 
-        //Get all the cards on the board
-        this.cards = this.getCards(cardClass);
+		//Get all the cards on the board
+		this.cards = this.getCards(cardClass);
 
-        //Currently flipped cards
-        this.flipped = [];
+		//Currently flipped cards
+		this.flipped = [];
 
-        //Is this an online game
-        this.gameType = "single";
+		//Is this an online game
+		this.gameType = "single";
 
-        //Is this my turn?
-        this.myTurn = false;
+		//Is this my turn?
+		this.myTurn = false;
 
-    }
+	}
 
-    setPlayers(playersArray) {
-        this.players = playersArray;
-        this.currentPlayer = playersArray[0];
+	setPlayers(playersArray) {
+		this.players = playersArray;
+		this.currentPlayer = playersArray[0];
 
-    }
+	}
 
-    setGameType(type) {
-        this.gameType = type;
+	setGameType(type) {
+		this.gameType = type;
 
-    }
+	}
 
-    setId(id) {
-        this.id = id;
+	setId(id) {
+		this.id = id;
 
-    }
+	}
 
-    getId() {
-        return this.id;
+	getId() {
+		return this.id;
 
-    }
+	}
 
-    getGameType() {
-        return this.gameType;
+	getGameType() {
+		return this.gameType;
 
-    }
+	}
 
-    getCurrentPlayerName() {
+	getCurrentPlayerName() {
 
-        return this.currentPlayer.getName();
-    }
+		return this.currentPlayer.getName();
+	}
 
-    setNames(name1, name2) {
-        this.players[0].setName(name1);
-        this.players[1].setName(name2);
+	setNames(name1, name2) {
+		this.players[0].setName(name1);
+		this.players[1].setName(name2);
 
-    }
+	}
 
 
-    getCards(cardClass) {
-        let cardElements = document.querySelectorAll(`.${cardClass}`);
-        let cards = Array(cardElements.length);
-        for (let i = 0; i < cardElements.length; i++) {
-            cards[i] = cardElements[i].dataset.card;
+	getCards(cardClass) {
+		let cardElements = document.querySelectorAll(`.${cardClass}`);
+		let cards = Array(cardElements.length);
+		for (let i = 0; i < cardElements.length; i++) {
+			cards[i] = cardElements[i].dataset.card;
 
-        }
+		}
 
-        return cards;
+		return cards;
 
-    }
+	}
 
-    sameFlipped() {
-        if (this.flipped[0] === this.flipped[1])
-            return true;
-        else
-            return false;
+	sameFlipped() {
+		if (this.flipped[0] === this.flipped[1])
+			return true;
+		else
+			return false;
 
-    }
+	}
 
-    flip(back) {
+	flip(back) {
 
-        if (this.flipped.length === 0) {
+		if (this.flipped.length === 0) {
 
-            this.flipped.push(back);
-            Render.flip(back);
+			this.flipped.push(back);
+			Render.flip(back);
 
 
-        } else {
-            this.flipped.push(back);
+		} else {
 
-            Render.flip(back);
+			if (this.isFlipped(back))
+				return;
 
-            //Increment the number of moves for current players
-            this.currentPlayer.incMoves();
+			this.flipped.push(back);
 
-            //Check if flipped pair
-            if (this.isPair()) {
-                this.addPair();
-                setTimeout(() => {
-                    this.removePair();
-                    this.flipBack();
-                    if (this.isEnded())
-                        this.endGame();
-                }, 4000);
+			Render.flip(back);
 
-            } else {
-                setTimeout(() => {
+			//Increment the number of moves for current players
+			this.currentPlayer.incMoves();
 
-                    Render.flipBack(this.flipped);
-                    this.endTurn();
-                }, 4000);
-            }
-        }
-    }
+			//Check if flipped pair
+			if (this.isPair()) {
+				this.addPair();
+				setTimeout(() => {
+					this.removePair();
+					this.flipBack();
+					if (this.isEnded())
+						this.endGame();
+				}, 4000);
 
-    endGame() {
+			} else {
+				setTimeout(() => {
 
+					Render.flipBack(this.flipped);
+					this.endTurn();
+				}, 4000);
+			}
+		}
+	}
 
+	isFlipped(back) {
 
-    }
+		if (back.dataset.id === this.flipped[0].dataset.id)
+			return true;
+		else
+			return false;
 
-    isEnded() {
-        if (this.cards.length === 0)
-            return true;
-        else
-            return false;
+	}
 
-    }
+	endGame() {
 
 
-    removePair() {
 
-        for (let card of this.flipped) {
+	}
 
-            card.parentElement.style.transform = "scale(0)";
-            card.parentElement.style.transition = "transform 1s";
+	isEnded() {
+		if (this.cards.length === 0)
+			return true;
+		else
+			return false;
 
-        }
+	}
 
-    }
 
-    isPair() {
-        if (this.flipped[0].dataset.card === this.flipped[1].dataset.card)
-            return true;
-        else
-            return false;
+	removePair() {
 
-    }
+		for (let card of this.flipped) {
 
-    addPair() {
-        let pairElement = this.flipped[0];
-        this.currentPlayer.addPair(pairElement);
+			card.parentElement.style.transform = "scale(0)";
+			card.parentElement.style.transition = "transform 1s";
 
-        this.cards = this.cards.filter((cardName) =>
-            (cardName !== pairElement.dataset.card));
+		}
 
-        Render.updateScore(this.currentPlayerIndex + 1);
+	}
 
-    }
+	isPair() {
+		if (this.flipped[0].dataset.card === this.flipped[1].dataset.card)
+			return true;
+		else
+			return false;
 
-    flipBack() {
-        this.flipped = [];
+	}
 
-    }
+	addPair() {
+		let pairElement = this.flipped[0];
+		this.currentPlayer.addPair(pairElement);
 
-    endTurn() {
-        //Empty flipped array
-        this.flipBack();
-        this.myTurn = false;
+		this.cards = this.cards.filter((cardName) =>
+			(cardName !== pairElement.dataset.card));
 
-        Render.updateScore(this.currentPlayerIndex + 1);
+		Render.updateScore(this.currentPlayerIndex + 1);
 
-        if (this.getGameType() !== "single") {
+	}
 
-            Render.whoseTurn(this.currentPlayerIndex + 1);
+	flipBack() {
+		this.flipped = [];
 
-            //Change the current player index            
-            this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
+	}
 
-            //Change the current player 
-            this.currentPlayer = this.players[this.currentPlayerIndex];
-        }
+	endTurn() {
+		//Empty flipped array
+		this.flipBack();
+		this.myTurn = false;
 
-    }
+		Render.updateScore(this.currentPlayerIndex + 1);
+
+		if (this.getGameType() !== "single") {
+
+			Render.whoseTurn(this.currentPlayerIndex + 1);
+
+			//Change the current player index            
+			this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
+
+			//Change the current player 
+			this.currentPlayer = this.players[this.currentPlayerIndex];
+		}
+
+	}
 
 }
