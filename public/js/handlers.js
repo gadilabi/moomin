@@ -37,7 +37,7 @@ function assignCardsHandler() {
             } else {
 
                 game.flip(this);
-
+				
 
             }
 
